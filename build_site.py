@@ -54,9 +54,6 @@ def nav_html(active):
             items.append(
                 f'          <li class="nav-item"><a href="{href}"{cur}>{label}</a></li>'
             )
-    items.append(
-        '          <li class="nav-item"><a class="btn btn-primary" href="how-to-help.html#donate">Donate</a></li>'
-    )
     return "\n".join(items)
 
 
