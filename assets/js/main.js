@@ -25,59 +25,74 @@
     if (e.key === "Escape") closeNav();
   });
 
-  /* On mobile, let a parent submenu link expand instead of navigate via a tap region.
-     We keep links functional; submenus are shown inline by CSS at small widths. */
+  /* On mobile, tapping a parent submenu link expands its submenu inline instead of
+     navigating. The mobile menu (and the inline submenu CSS) only exist at <= 760px,
+     so we gate the behavior on that exact breakpoint to avoid hijacking the desktop
+     hover dropdowns shown in the 761-980px range. */
+  var mobileNav = window.matchMedia("(max-width: 760px)");
+
+  // Pull the <main> from a same-origin page and swap it into the current document so
+  // that closing the menu leaves the user on the freshly tapped page. Best-effort only.
+  function swapMainFromPage(url) {
+    // fetch() against file:// always rejects, so skip the prefetch in that case.
+    if (window.location.protocol === "file:") return;
+
+    fetch(url, { credentials: "same-origin" })
+      .then(function (res) {
+        if (!res.ok) throw new Error("Bad response: " + res.status);
+        return res.text();
+      })
+      .then(function (html) {
+        var parsed = new DOMParser().parseFromString(html, "text/html");
+        var nextMain = parsed.querySelector("main");
+        var currentMain = document.querySelector("main");
+        if (nextMain && currentMain) {
+          currentMain.replaceWith(nextMain);
+        }
+        if (parsed.title) document.title = parsed.title;
+        // Reflect the new location without a reload; closing the menu keeps them here.
+        history.pushState({ url: url }, parsed.title || "", url);
+      })
+      .catch(function () {
+        /* Network/parse failure: leave the current page untouched. */
+      });
+  }
+
   var submenuLinks = document.querySelectorAll(".has-submenu > a");
   submenuLinks.forEach(function (link) {
     link.addEventListener("click", function (e) {
-      // Check if we are in mobile view by checking if the menu is actively open
-      if (document.body.classList.contains("nav-open") || window.innerWidth <= 980) {
-        e.preventDefault();
-        e.stopPropagation();
+      if (!mobileNav.matches) return; // desktop: let the link navigate normally
 
-        var li = this.parentElement;
-        var wasExpanded = li.classList.contains("expanded");
+      e.preventDefault();
+      e.stopPropagation();
 
-        // Collapse all others
-        document.querySelectorAll(".has-submenu.expanded").forEach(function(el) {
-          if (el !== li) el.classList.remove("expanded");
-        });
+      var li = this.parentElement;
+      var wasExpanded = li.classList.contains("expanded");
 
-        if (!wasExpanded) {
-          li.classList.add("expanded");
-        } else {
-          li.classList.remove("expanded");
-        }
+      // Accordion: collapse any other open submenus.
+      document.querySelectorAll(".has-submenu.expanded").forEach(function (el) {
+        if (el !== li) el.classList.remove("expanded");
+      });
 
-        // Fetch page behind the scenes
-        var url = this.getAttribute("href");
-        if (url && url !== "#") {
-          fetch(url)
-            .then(function(res) { return res.text(); })
-            .then(function(html) {
-              var parser = new DOMParser();
-              var doc = parser.parseFromString(html, "text/html");
-              var newMain = doc.querySelector("main");
-              var currentMain = document.querySelector("main");
-              if (newMain && currentMain) {
-                currentMain.innerHTML = newMain.innerHTML;
-                document.title = doc.title;
-                history.pushState(null, "", url);
-
-                // Update active state in nav
-                document.querySelectorAll(".main-nav a").forEach(function(a) {
-                  a.removeAttribute("aria-current");
-                  if (a.getAttribute("href") === url || a.getAttribute("href") === url.split('/').pop()) {
-                    a.setAttribute("aria-current", "page");
-                  }
-                });
-              }
-            })
-            .catch(function(err) {
-              console.error("Failed to load page behind the scenes", err);
-            });
-        }
+      if (wasExpanded) {
+        li.classList.remove("expanded");
+      } else {
+        li.classList.add("expanded");
+        // Bonus: prefetch this top-level page and swap it in behind the open menu.
+        swapMainFromPage(this.getAttribute("href"));
       }
+    });
+  });
+
+  /* Mark a nav link as active on click so it changes color immediately, instead of
+     only reacting to hover. This listener runs after the submenu handler above, so if
+     that called preventDefault (mobile submenu toggle), we skip the active styling. */
+  var navLinks = document.querySelectorAll(".main-nav a");
+  navLinks.forEach(function (link) {
+    link.addEventListener("click", function (e) {
+      if (e.defaultPrevented) return; // submenu toggle, not a real navigation
+      navLinks.forEach(function (other) { other.classList.remove("is-active"); });
+      this.classList.add("is-active");
     });
   });
 

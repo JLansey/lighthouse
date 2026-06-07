@@ -11,14 +11,41 @@
 <body>
   <header class="site-header">
     <div class="container header-bar">
-      <a class="brand" href="/">
-        <span class="brand-mark">LV<br>112</span>
-        <span class="brand-text">
-          <span class="brand-title">Nantucket Lightship</span>
-          <span class="brand-sub">U.S. Lightship Museum</span>
-        </span>
-      </a>
+      <button class="nav-toggle" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle menu">
+        <span class="bars"><span></span></span>
+        <span>Menu</span>
+      </button>
+      <nav class="main-nav" id="primary-nav" aria-label="Primary">
+        <ul>
+          <li class="nav-item"><a href="/">Home</a></li>
+          <li class="nav-item has-submenu">
+            <a href="/lv-112.html">LV-112</a>
+            <ul class="submenu">
+              <li><a href="/lv-112.html">About LV-112</a></li>
+              <li><a href="/mission.html">Mission / Purpose</a></li>
+              <li><a href="/current-lightships.html">Current U.S. Lightship Museums</a></li>
+              <li><a href="/crew-quotes.html">Crew Quotes</a></li>
+              <li><a href="/gallery.html">Photo Gallery</a></li>
+              <li><a href="/news.html">News</a></li>
+              <li><a href="/visiting-hours.html">Visiting Hours</a></li>
+            </ul>
+          </li>
+          <li class="nav-item has-submenu">
+            <a href="/how-to-help.html">How to Help</a>
+            <ul class="submenu">
+              <li><a href="/how-to-help.html">How to Help</a></li>
+              <li><a href="/volunteer.html">Volunteer</a></li>
+              <li><a href="/supporters.html">Our Supporters</a></li>
+              <li><a href="/vehicle-donation.html">Vehicle Donation Program</a></li>
+            </ul>
+          </li>
+          <li class="nav-item"><a href="/contact.html">Contact Us</a></li>
+          <li class="nav-item"><a href="/newsletter.html">Newsletter</a></li>
+          <li class="nav-item"><a href="/membership.html">Membership</a></li>
+        </ul>
+      </nav>
     </div>
+    <div class="nav-backdrop"></div>
   </header>
   <main id="main">
     <section class="section" style="text-align:center;">

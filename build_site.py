@@ -35,7 +35,10 @@ NAV = [
 
 
 def nav_html(active):
-    items = []
+    home_current = ' aria-current="page"' if active == "home" else ""
+    items = [
+        f'          <li class="nav-item"><a href="index.html"{home_current}>Home</a></li>'
+    ]
     for key, href, label, sub in NAV:
         cur = ' aria-current="page"' if key == active else ""
         if sub:
@@ -62,13 +65,6 @@ def header(active):
 
   <header class="site-header">
     <div class="container header-bar">
-      <a class="brand" href="index.html">
-        <span class="brand-mark">LV<br>112</span>
-        <span class="brand-text">
-          <span class="brand-title">Nantucket Lightship</span>
-          <span class="brand-sub">U.S. Lightship Museum</span>
-        </span>
-      </a>
       <button class="nav-toggle" aria-expanded="false" aria-controls="primary-nav" aria-label="Toggle menu">
         <span class="bars"><span></span></span>
         <span>Menu</span>
