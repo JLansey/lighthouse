@@ -787,10 +787,10 @@ def build():
         ("docksidethumbnail_fs", "docksidethumbnail_fs.JPG", "LV-112 berthed at Oyster Bay Pier (2008)."),
     ]
     tiles = "\n".join(
-        f'''            <button class="gallery-item" type="button" data-lightbox
+        f'''            <a class="gallery-item" href="assets/images/gallery/fullsize/{fs}" data-lightbox=""
               data-caption="{cap}">
               <img src="assets/images/gallery/fullsize/{fs}" alt="{cap_plain}" loading="lazy">
-            </button>'''
+            </a>'''
         for _id, fs, cap in gallery_imgs
         for cap_plain in [cap.replace('"', '&quot;')]
     )
