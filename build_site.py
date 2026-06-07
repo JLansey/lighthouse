@@ -7,9 +7,17 @@ footer and per-page content into plain static HTML files in the project root.
 The generated *.html files are what gets deployed; this script just keeps the
 shared chrome DRY. Run:  python3 build_site.py
 """
+import html
 import os
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
+
+SITE_URL = "https://nantucketlightshiplv-112.org"
+SITE_NAME = "Nantucket Lightship / LV-112"
+OG_IMAGE = f"{SITE_URL}/assets/images/h_lightship_right_tall_2021.jpg"
+OG_IMAGE_ALT = (
+    "Nantucket Lightship/LV-112 at her berth in East Boston celebrating her 90th birthday"
+)
 
 # (top-level nav key) used to mark the current section
 NAV = [
@@ -132,14 +140,38 @@ FOOTER = '''  <footer class="site-footer">
 '''
 
 
+def esc_attr(value):
+    return html.escape(value, quote=True)
+
+
+def og_meta(filename, title, description):
+    page_url = f"{SITE_URL}/{filename}"
+    full_title = f"{title} | {SITE_NAME}"
+    desc = esc_attr(description)
+    return f'''
+  <meta property="og:site_name" content="{esc_attr(SITE_NAME)}">
+  <meta property="og:title" content="{esc_attr(full_title)}">
+  <meta property="og:description" content="{desc}">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="{page_url}">
+  <meta property="og:image" content="{OG_IMAGE}">
+  <meta property="og:image:width" content="1024">
+  <meta property="og:image:height" content="1024">
+  <meta property="og:image:alt" content="{esc_attr(OG_IMAGE_ALT)}">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{esc_attr(full_title)}">
+  <meta name="twitter:description" content="{desc}">
+  <meta name="twitter:image" content="{OG_IMAGE}">'''
+
+
 def page(filename, title, description, active, body, head_extra=""):
-    html = f'''<!DOCTYPE html>
+    html_doc = f'''<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{title} | Nantucket Lightship / LV-112</title>
-  <meta name="description" content="{description}">
+  <meta name="description" content="{description}">{og_meta(filename, title, description)}
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="assets/css/styles.css">{head_extra}
 </head>
@@ -151,7 +183,7 @@ def page(filename, title, description, active, body, head_extra=""):
 
 {FOOTER}'''
     with open(os.path.join(ROOT, filename), "w", encoding="utf-8") as f:
-        f.write(html)
+        f.write(html_doc)
     print("wrote", filename)
 
 
@@ -232,8 +264,8 @@ def build():
     about = '''            <h2>About LV-112</h2>
             <p class="lead">Rescuing a U.S. National Historic Landmark.</p>
             <figure class="figure">
-              <img src="assets/images/nantucket_lightship2016.jpg" alt="Nantucket Lightship LV-112 berthed in Boston Harbor">
-              <figcaption><em>Nantucket Lightship / LV-112</em></figcaption>
+              <img src="assets/images/nantucket_lightship2016.jpg" alt="Nantucket Lightship/LV-112 at her berth in East Boston celebrating her 90th birthday">
+              <figcaption>Nantucket Lightship/LV-112 at her berth in East Boston celebrating her 90th birthday.</figcaption>
             </figure>
             <h3>Lifelines on the sea</h3>
             <p>Lightships were stationed at the most dangerous areas along the U.S. oceanic and Great Lakes coastlines. These floating sentinels were part of a lifeline that played an important role in the development of our country. They are a part of our maritime heritage and serve as a memorial to the brave U.S. Coast Guard (USCG) lightship sailors who served on them, risking and sacrificing their lives.</p>
@@ -766,6 +798,7 @@ def build():
         ("lv112_017_fs", "lv112_017_fs.jpg", "LV-112, on Nantucket Shoals station, prior to 1960."),
         ("EDNA_fs", "EDNA_fs.jpg", "LV-112 original structure, prior to receiving major damage caused by Hurricane Edna while on station on 9/14/54 (when the bridge was rebuilt, fewer port holes were installed &mdash; compare photo of LV-112 bridge as a Relief vessel). During Hurricane Edna in 70 ft seas and 110 mph winds, bow plates were damaged, bridge and pilot house stove in, small boats demolished and rudder severely damaged; minor injuries to several crew members. (USCG photo &mdash; courtesy of Bernie Webber)"),
         ("nantucket_shoals_fs", "nantucket_shoals_fs.jpg", "LV-112, on Nantucket Shoals station during a storm at sea with a wave breaking over the stern section. Photo taken from another vessel, prior to 1960. (Photo courtesy of Don Yeskoo)"),
+        ("lv112_roughseas_fs", "lv112_roughseas_fs.jpg", "LV-112, on Nantucket Shoals station in rough seas, prior to 1960."),
         ("LV112_men_mast_fs", "LV112_men_mast_fs.jpg", "LV-112 &mdash; view from the top of the aft mast to the forward mast. Enginemen were replacing navigational lights. The anemometer is halfway out on the yardarm on the left. Photo taken by crewman Rich Racicot, 1964-66."),
         ("LV-112_BRIDGE_fs", "LV-112_BRIDGE_fs.jpg", "The bridge of the LV-112; the photograph probably dates from 1936, the year she was built. (Courtesy of USCG)"),
         ("onstationthumbnail_fs", "onstationthumbnail_fs.jpg", "LV-112 on Nantucket Shoals Station, 1975."),
@@ -781,6 +814,7 @@ def build():
         ("lightship_tow_1_fs", "lightship_tow_1_fs.jpg", "Nantucket / LV-112 being towed by the tugboat Lynx, heading east-bound from Oyster Bay, Long Island, NY to Boston on the Cape Cod Canal, May 2010. Photo: Courtesy of Ron Janard"),
         ("nantucket_undersail_fs", "nantucket_undersail_fs.jpg", "Nantucket / LV-112 being towed by the tugboat Lynx, heading east-bound from Oyster Bay, Long Island, NY to Boston on the Cape Cod Canal, May 2010. Photo: Courtesy of Ron Janard"),
         ("nantucket_bostonharbor_fs", "nantucket_bostonharbor_fs.jpg", "Nantucket / LV-112 berthed at the Boston Harbor Shipyard &amp; Marina in East Boston, 2010."),
+        ("lv112_90th_birthday_fs", "lv112_90th_birthday_fs.jpg", "Nantucket Lightship/LV-112 at her berth in East Boston celebrating her 90th birthday."),
         ("bowthumbnail_fs", "bowthumbnail_fs.jpg", "LV-112, bow / mushroom anchors, 7,000 lbs. each (2008)."),
         ("wheelhousethmbnail_fs", "wheelhousethmbnail_fs.jpg", "Bridge / wheelhouse (2008)."),
         ("charttablethumbnail_fs", "charttablethumbnail_fs.jpg", "Navigational chart table in wheelhouse (2008)."),
