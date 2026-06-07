@@ -1,7 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="LV-112">
-  <rect width="64" height="64" rx="12" fill="#0b2a45"/>
-  <circle cx="32" cy="32" r="22" fill="#c4302b"/>
-  <circle cx="32" cy="32" r="22" fill="none" stroke="#ffffff" stroke-opacity="0.35" stroke-width="3"/>
-  <text x="32" y="29" text-anchor="middle" font-family="Impact, sans-serif" font-size="16" font-weight="normal" fill="#ffffff">LV</text>
-  <text x="32" y="45" text-anchor="middle" font-family="Impact, sans-serif" font-size="16" font-weight="normal" fill="#ffffff">112</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="N">
+  <rect width="64" height="64" fill="#c4302b"/>
+  <text x="32" y="46" text-anchor="middle" font-family="Impact, 'Arial Black', 'Helvetica Bold', sans-serif" font-size="44" font-weight="bold" fill="#ffffff">N</text>
 </svg>
