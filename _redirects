@@ -1,0 +1,16 @@
+# Preserve old .htm URLs from the legacy site (301 permanent redirects)
+/index.htm                      /                          301
+/lv-112.htm                     /lv-112.html               301
+/mission.htm                    /mission.html              301
+/current_lightships.htm         /current-lightships.html   301
+/crew_quotes.htm                /crew-quotes.html          301
+/gallery.htm                    /gallery.html              301
+/news.htm                       /news.html                 301
+/visiting_hours.htm             /visiting-hours.html       301
+/how_to_help.htm                /how-to-help.html          301
+/volunteer.htm                  /volunteer.html            301
+/supporters.htm                 /supporters.html           301
+/vehicle_donation_program.htm   /vehicle-donation.html     301
+/contact_us.htm                 /contact.html              301
+/newsletter.htm                 /newsletter.html           301
+/membership.htm                 /membership.html           301
