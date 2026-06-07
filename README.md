@@ -54,17 +54,17 @@ fast, accessible, and easy to deploy** on Cloudflare Pages.
 ## Deploy to Cloudflare Pages
 
 The development site is deployed at
-**[misty-station-98f4.pages.dev](https://misty-station-98f4.pages.dev/)**.
+**[lighthouse112.pages.dev](https://lighthouse112.pages.dev/)**.
 
 Every push to `main` runs `.github/workflows/deploy.yml` and uploads this static
-directory to the `misty-station-98f4` Cloudflare Pages project. There is no build
+directory to the `lighthouse112` Cloudflare Pages project. There is no build
 step. The GitHub repository must have a `CLOUDFLARE_API_TOKEN` Actions secret with
 Cloudflare Pages write access.
 
 For a manual deployment from an authenticated workstation:
 
 ```bash
-npx wrangler pages deploy . --project-name=misty-station-98f4 --branch=main
+npx wrangler pages deploy . --project-name=lighthouse112 --branch=main
 ```
 
 ### Custom domain

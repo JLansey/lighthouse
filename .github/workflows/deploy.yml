@@ -17,4 +17,4 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: "48bf68f44e5afaea5be32902857b919e"
-          command: pages deploy . --project-name=misty-station-98f4 --branch=main --commit-dirty=true
+          command: pages deploy . --project-name=lighthouse112 --branch=main --commit-dirty=true
