@@ -12,7 +12,7 @@ import os
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 
-SITE_URL = "https://nantucketlightshiplv-112.org"
+SITE_URL = "https://lighthouse112.pages.dev"
 SITE_NAME = "Nantucket Lightship / LV-112"
 OG_IMAGE = f"{SITE_URL}/assets/images/h_lightship_right_tall_2021.jpg"
 OG_IMAGE_ALT = (
