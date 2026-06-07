@@ -27,6 +27,59 @@
 
   /* On mobile, let a parent submenu link expand instead of navigate via a tap region.
      We keep links functional; submenus are shown inline by CSS at small widths. */
+  var submenuLinks = document.querySelectorAll(".has-submenu > a");
+  submenuLinks.forEach(function (link) {
+    link.addEventListener("click", function (e) {
+      // Check if we are in mobile view by checking if the menu is actively open
+      if (document.body.classList.contains("nav-open") || window.innerWidth <= 980) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        var li = this.parentElement;
+        var wasExpanded = li.classList.contains("expanded");
+
+        // Collapse all others
+        document.querySelectorAll(".has-submenu.expanded").forEach(function(el) {
+          if (el !== li) el.classList.remove("expanded");
+        });
+
+        if (!wasExpanded) {
+          li.classList.add("expanded");
+        } else {
+          li.classList.remove("expanded");
+        }
+
+        // Fetch page behind the scenes
+        var url = this.getAttribute("href");
+        if (url && url !== "#") {
+          fetch(url)
+            .then(function(res) { return res.text(); })
+            .then(function(html) {
+              var parser = new DOMParser();
+              var doc = parser.parseFromString(html, "text/html");
+              var newMain = doc.querySelector("main");
+              var currentMain = document.querySelector("main");
+              if (newMain && currentMain) {
+                currentMain.innerHTML = newMain.innerHTML;
+                document.title = doc.title;
+                history.pushState(null, "", url);
+
+                // Update active state in nav
+                document.querySelectorAll(".main-nav a").forEach(function(a) {
+                  a.removeAttribute("aria-current");
+                  if (a.getAttribute("href") === url || a.getAttribute("href") === url.split('/').pop()) {
+                    a.setAttribute("aria-current", "page");
+                  }
+                });
+              }
+            })
+            .catch(function(err) {
+              console.error("Failed to load page behind the scenes", err);
+            });
+        }
+      }
+    });
+  });
 
   /* ---------- Gallery lightbox ---------- */
   var items = Array.prototype.slice.call(document.querySelectorAll("[data-lightbox]"));
